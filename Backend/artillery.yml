@@ -1,0 +1,65 @@
+config:
+  target: http://localhost:3000
+  phases:
+    # Ramp-up phase: gradually increase load from 0 to 500 RPS over 10 seconds
+    - duration: 10
+      arrivalRate: 50
+      rampTo: 500
+      name: "Ramp-up to 500 RPS"
+    
+    # Sustain phase: maintain 500 RPS for 40 seconds
+    - duration: 40
+      arrivalRate: 500
+      name: "Sustained 500 RPS load"
+    
+    # Cool-down phase: ramp down over 10 seconds
+    - duration: 10
+      arrivalRate: 500
+      rampTo: 50
+      name: "Cool-down phase"
+  
+  # CSV data source with tenantId values
+  # Load CSV file with tenant data
+  payload:
+    path: "tenants.csv"
+    fields:
+      - "tenantId"
+    order: "random"
+    skipHeader: true
+    delimiter: ","
+  
+  # HTTP client settings - reuse connections to avoid Windows port exhaustion
+  http:
+    timeout: 30
+    pool: 50           # Reuse a small pool of connections (fixes EADDRINUSE on Windows)
+    maxSockets: 50
+    extendedMetrics: true
+  
+  # Reporting configuration
+  reporting:
+    textSummary: true
+    json: "artillery-report.json"
+    html: "artillery-report.html"
+  
+  # Enable debug logs for connection insights
+  # Uncomment to see detailed logs
+  # debug:
+  #   - http
+  #   - socketio
+
+scenarios:
+  - name: "Widget Config Retrieval"
+    description: "Simulate real users fetching widget configurations by tenantId"
+    weight: 100
+    flow:
+      - get:
+          url: "/api/v1/widget/{{ tenantId }}"
+          headers:
+            connection: "keep-alive"
+          capture:
+            - json: "$.tenantId"
+              as: "responseTenantId"
+          expect:
+            - statusCode: [200, 404]
+          timeout: 25000
+          think: 100  # 100ms think time between requests (realistic user behavior)
