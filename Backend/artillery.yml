@@ -2,13 +2,13 @@ config:
   target: http://localhost:3000
   phases:
     # Ramp-up phase: gradually increase load from 0 to 500 RPS over 10 seconds
-    - duration: 10
-      arrivalRate: 50
+    - duration: 60
+      arrivalRate: 10
       rampTo: 500
       name: "Ramp-up to 500 RPS"
     
-    # Sustain phase: maintain 500 RPS for 40 seconds
-    - duration: 40
+    # Sustain phase: maintain 500 RPS for 3 minutes
+    - duration: 120
       arrivalRate: 500
       name: "Sustained 500 RPS load"
     
@@ -62,4 +62,5 @@ scenarios:
           expect:
             - statusCode: [200, 404]
           timeout: 25000
-          think: 100  # 100ms think time between requests (realistic user behavior)
+      - think: 100  # 100ms think time between requests (realistic user behavior)
+

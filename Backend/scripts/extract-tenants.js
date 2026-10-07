@@ -19,7 +19,7 @@ if (!MONGO_URI) {
 }
 
 const TENANT_CSV_PATH = path.join(process.cwd(), 'tenants.csv');
-const LIMIT = 1000; // Extract 1000 IDs for load testing
+const LIMIT = 25000; // Extract 25000 IDs for load testing
 
 async function extractTenantIds() {
   try {

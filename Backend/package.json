@@ -20,7 +20,8 @@
     "@faker-js/faker": "^9.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.6.3"
+    "mongoose": "^9.6.3",
+    "redis": "^6.3.0"
   },
   "devDependencies": {
     "artillery": "^1.7.9",

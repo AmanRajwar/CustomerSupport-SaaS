@@ -5,5 +5,8 @@ const router = express.Router();
 
 router.post('/', createWidget);
 router.get('/widget/:tenantId', getWidgetById);
+router.get('/test', (req, res) => {
+    res.send('Test route is working');
+});
 
 export default router;
