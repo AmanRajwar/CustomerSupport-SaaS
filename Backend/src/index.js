@@ -1,8 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 import connectDB from "./utils/db.js";
+import { connectRabbitMQ } from "./configs/rabbitmq.js";
 import express from "express";
 import widgetRoutes from "./routes/widget.route.js";
+import messagesRoutes from "./routes/messages.route.js";
 // const express = require("express")
 
 const app = express();
@@ -15,11 +17,12 @@ app.get("/api/test", (req, res) => {
 });
 
 
-app.use("/api/v1", widgetRoutes);
+app.use("/api/v1", widgetRoutes, messagesRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   connectDB();
+  connectRabbitMQ();
 });
 
 export default app;
