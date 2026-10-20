@@ -5,6 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
+    "dev:worker": "nodemon src/workers/message-worker.js",
+    "worker": "node src/workers/message-worker.js",
     "start": "node src/index.js",
     "seed": "node scripts/seed.js",
     "extract-tenants": "node scripts/extract-tenants.js",
@@ -18,11 +20,13 @@
   "type": "module",
   "dependencies": {
     "@faker-js/faker": "^9.0.3",
+    "@socket.io/redis-adapter": "^8.3.0",
     "amqplib": "^2.2.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongoose": "^9.6.3",
-    "redis": "^6.3.0"
+    "redis": "^6.3.0",
+    "socket.io": "^4.8.4"
   },
   "devDependencies": {
     "artillery": "^1.7.9",

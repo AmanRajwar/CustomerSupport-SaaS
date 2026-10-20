@@ -3,12 +3,24 @@
 // const mongoose = require('mongoose');
 import amqp from 'amqplib';
 import mongoose from 'mongoose';
-import Message from '../models/Messages.js';
+import Message from '../models/messages.js';
 import dotenv from "dotenv";
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // Ensure MongoDB is connected (use your actual DB URI)
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/saas_db');
+const mongoUri = process.env.MONGO_URI;
+
+if (!mongoUri) {
+  throw new Error('MONGO_URI is missing. Add it to Backend/.env before starting worker.');
+}
+
+mongoose.connect(mongoUri);
+
 
 const startWorker = async () => {
   try {
